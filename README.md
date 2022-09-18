@@ -12,7 +12,6 @@ The dataset we use comes from DCFCrystal's BD_CRYS and the raw dataser can be ob
 - numpy
 - tqdm
 - yaml
-- tqdm
 - tensorboard
 ## Test
 
