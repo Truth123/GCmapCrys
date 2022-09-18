@@ -1,0 +1,35 @@
+dataset_dir: "data/CRYS"
+model: "GCmapCrys"
+feature_dir: "feature"
+
+GCmapCrys:
+  embedding_dim: 64
+  fc_dim: 32
+  fc_dropout: 0
+  mp:
+    layers: 3
+    edge_feats: "[4,4,4]"
+    node_feats: "[16,16,16]"
+    multi_heads: "[4,4,4]"
+    gat_dropout: "[0,0,0]"
+  
+DeepCrystal: "None"
+
+checkpoint:
+  load: false
+  load_pth: ""
+  save_model: true
+  save_dir: "checkpoint/trainval/GCmapCrys"
+
+session:
+  device: "cuda:0"
+  max_epochs: 200
+  batch_size: 64
+  lr: 0.001
+  weight_decay: 1.0e-03
+
+log:
+  log_dir: "checkpoint/trainval/GCmapCrys"
+  tensorboard: true
+  write_logfile: true
+
