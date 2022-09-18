@@ -25,7 +25,7 @@ XXXXXXXXXXX
 XXXXXXXXXXXXXX
 ...
 ```
-2. The model input also requires multiple sequence feature information, and the following script can be used to obtain the corresponding feature files.
+2. The model input also requires multiple sequence-based features, and the following script can be used to obtain the corresponding feature files.
 ```python
 python generate_featrues.py input.fasta
 ```
