@@ -1,7 +1,7 @@
 # GCmapCrys:Integrating graph attention network with predicted contact map for multi-stage protein crystallization propensity prediction
 
 ## Dataset
-The dataset we use comes from DCFCrystal's BD_CRYS and the raw dataser can be obtained from this [link](http://202.119.84.36:3079/dcfcrystal/Data.html).
+The dataset we use comes from DCFCrystal's BD_CRYS and the raw dataset can be obtained from this [link](http://202.119.84.36:3079/dcfcrystal/Data.html).
 
 ## Environment
 - python 3.7
