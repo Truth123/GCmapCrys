@@ -1,11 +1,12 @@
 from dataset import MyDataset
 from torch_geometric.loader import DataLoader as gemetric_Dataloader
-from net.gat_pool import GCmapCrys
+from net.gat import GCmapCrys
 import util
 import os, argparse, torch
 from tqdm import tqdm
 import numpy as np
 import csv
+from generate_features import generate_feats
 
 projectPath = os.path.dirname(__file__)
 
@@ -22,6 +23,13 @@ def run():
         input_fil, 
         feature_dir
     )
+    test_no_feats_dict = {}
+    for id in test_dataset.x.keys():
+        feats_file = os.path.join(feature_dir, id + ".h5")
+        if not os.path.exists(feats_file):
+            test_no_feats_dict[id] = test_dataset.x[id]
+    generate_feats(test_no_feats_dict, feature_dir)
+
     batch_size = conf["session"]["batch_size"]
     test_dataloader = gemetric_Dataloader(test_dataset, batch_size=batch_size, shuffle=False, num_workers = 4, pin_memory = True)
 
