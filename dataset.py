@@ -36,7 +36,6 @@ class MyDataset(Dataset):
         else:
             self.ids = list(self.x.keys())
         random.shuffle(self.ids)
-        self.sampler = None
         self.feature_dir = feature_dir
         self.use_ccmap = use_ccmap
 
@@ -99,6 +98,3 @@ class MyDataset(Dataset):
 
     def __len__(self) -> int:
         return len(self.ids)
-
-
-
