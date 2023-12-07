@@ -19,8 +19,8 @@ RUN_SCRATCH_EXE = "pkgs/SCRATCH-1D_1.2/bin/get_abinitioo_predictions.sh"
 HHBLITS_EXE = "pkgs/hhsuite/bin/hhblits"  
 HHBLITSDB = "uniclust30_2018_08" 
 MEFF_FILTER_EXE = "pkgs/Meff_Filter/meff_filter"
-PI_EXE = "pkgs/ipc-2.0/scripts/ipc2_protein_svr_predictor.py"
-PI_MODEL = "pkgs/ipc-2.0/models/IPC2_protein_75_SVR_19.pickle"
+PI_EXE = "pkgs/ipc-2.0.1/scripts/ipc2_protein_svr_predictor.py"
+PI_MODEL = "pkgs/ipc-2.0.1/models/IPC2_protein_75_SVR_19.pickle"
 
 
 hhblits_template=Template("$hhblits -i $infile -diff inf -d $db -cpu $ncpu -oa3m $outprefix.a3m "+ \

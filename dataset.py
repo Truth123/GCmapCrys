@@ -43,19 +43,23 @@ class MyDataset(Dataset):
     def __getitem__(self, index: int):
         id = self.ids[index]
         seq = str(self.x[id])
-        y = int(self.y[id])
+
+        ## y is null during inference
+        y = 0
+        if id in self.y:
+            y = int(self.y[id])
         y = 1 if y == 1 else 0
+
         feature_file = os.path.join(self.feature_dir, id + '.h5')
         f = h5py.File(feature_file, 'r')
         ## f.keys(): ['AA', 'AAindex', 'Gravy', 'PSSM', 'RSA', 'SS', 'edge_attr', 'edge_index', 'id', 'log_length', 'pI', 'seq']
-        assert seq == str(f["seq"][()], 'utf-8') and id == str(f["id"][()], 'utf-8')
         num_nodes = len(seq)
         aa = torch.tensor(f["AA"][()], dtype=torch.long)
         log_length = f["log_length"][()]
 
+        x_emb = aa
+
         ss8 = torch.tensor(f["SS"][()], dtype=torch.long)
-        x_emb = aa * 8 + ss8
-        emb_dim = 168
         
         x = torch.zeros((num_nodes, 1), dtype=torch.float32).fill_(log_length)
 
@@ -82,6 +86,7 @@ class MyDataset(Dataset):
                 "id": id,
                 "x": x,
                 "x_emb": x_emb,
+                "ss8": ss8,
                 "edge_attr": edge_attr,
                 "edge_index": edge_index,
                 "y": y
@@ -91,7 +96,7 @@ class MyDataset(Dataset):
             tmp = torch.zeros((800 - num_nodes, x.shape[1]), dtype=torch.float32)
             x = torch.cat((x, tmp), dim=0)  ## (800, n)
             x = x.permute(1,0)              ## (n, 800)
-            tmp_emb = torch.zeros((800 - num_nodes), dtype=torch.long).fill_(emb_dim)
+            tmp_emb = torch.zeros((800 - num_nodes), dtype=torch.long).fill_(20)
             x_emb = torch.cat((x_emb, tmp_emb), dim=0) ## (800)
             return x, x_emb, y, id
 

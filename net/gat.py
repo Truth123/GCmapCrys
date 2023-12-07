@@ -14,12 +14,16 @@ class GCmapCrys(nn.Module):
     def __init__(self, conf):
         super(GCmapCrys, self).__init__()
         ## node_feature
-        self.aass_embedding = nn.Embedding(
-            num_embeddings= 168,
-            embedding_dim= conf['embedding_dim']
+        self.aa_emb_layer = nn.Embedding(
+            num_embeddings= 21,
+            embedding_dim= conf["embedding_aa_dim"]
+        )
+        self.ss_emb_layer = nn.Embedding(
+            num_embeddings= 8,
+            embedding_dim= conf["embedding_ss_dim"]
         )
 
-        in_n = 590 + conf['embedding_dim']  # (PSSM:20; length:1; Gravy:1; pI:1; AAindex:566; RSA:1) + (AAC; SS)
+        in_n = 590 + conf['embedding_aa_dim'] + conf["embedding_ss_dim"] # (PSSM:20; length:1; Gravy:1; pI:1; AAindex:566; RSA:1) + (AAC; SS)
         in_e = 1
 
         fc_dim = conf['fc_dim']
@@ -47,7 +51,7 @@ class GCmapCrys(nn.Module):
             self.all_mp.append(gat_mp)
             in_e, in_n = out_e, out_n*n_heads
         
-        self.dense = nn.Sequential(
+        self.gcmap_dense = nn.Sequential(
             nn.Linear(in_n, fc_dim),
             nn.ReLU(inplace=True),
             nn.Dropout(fc_dropout, inplace=True)
@@ -58,13 +62,15 @@ class GCmapCrys(nn.Module):
     
     def forward(self, graph):
         x_feature = graph.x                            ## (L, 590)
-        x_emb = graph.x_emb                            ## (L, )
+        x_emb = graph.x_emb
+        ss8 = graph.ss8                                ## (L, )
         batch = graph.batch                            ## (L, )
         edge_attr = graph.edge_attr                    ## (E, 1)
         edge_index = graph.edge_index                  ## (2, E)
 
-        x_emb = self.aass_embedding(x_emb)             ## (L, 64)         
-        x = torch.cat((x_emb, x_feature),dim=1)        ## (L, 64+590)
+        x_emb = self.aa_emb_layer(x_emb)                  
+        ss8 = self.ss_emb_layer(ss8)                  
+        x = torch.cat((x_emb, ss8, x_feature),dim=1) 
         
         u = []
         for update_edge, gat, batch_normal in self.all_mp:
@@ -75,6 +81,6 @@ class GCmapCrys(nn.Module):
             x = batch_normal(x)
             x = F.relu(x)
         u = gap(x, batch)
-        u = self.dense(u)
+        u = self.gcmap_dense(u)
         u = self.out_layer(u)
         return u

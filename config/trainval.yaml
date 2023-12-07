@@ -3,7 +3,8 @@ model: "GCmapCrys"
 feature_dir: "feature"
 
 GCmapCrys:
-  embedding_dim: 64
+  embedding_aa_dim: 32
+  embedding_ss_dim: 16
   fc_dim: 32
   fc_dropout: 0
   mp:

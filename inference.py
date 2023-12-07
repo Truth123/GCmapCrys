@@ -44,8 +44,6 @@ def run():
 
     for data in tqdm(test_dataloader):
         data = data.to(device)
-        y = data.y
-        out = model(data)
         out = model(data)
         te_y_id += list(data.id)
         out = out.squeeze(dim=-1)
