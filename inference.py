@@ -15,6 +15,8 @@ def run():
     parser.add_argument('conf',help='configure file')
     args = parser.parse_args()
     conf = util.load_yaml(args.conf)
+
+    cutoff = 0.461
     
     input_fil = os.path.join(projectPath, conf["input_file"])
     feature_dir = os.path.join(projectPath, conf["feature_dir"])
@@ -52,9 +54,12 @@ def run():
         
     with open(conf["output"], 'w', newline='') as f1:
         writer = csv.writer(f1)
-        writer.writerow(["id", "score"])
+        writer.writerow(["id", "score", "label"])
         for i, value in enumerate(te_y_score):
-            writer.writerow([te_y_id[i], value])
+            label = -1
+            if value >= cutoff:
+                label = 1
+            writer.writerow([te_y_id[i], value.item(), label])
 
 
 if __name__ == "__main__":
