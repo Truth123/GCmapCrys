@@ -16,7 +16,7 @@ def run():
     args = parser.parse_args()
     conf = util.load_yaml(args.conf)
 
-    cutoff = 0.461
+    cutoff = 0.502
     
     input_fil = os.path.join(projectPath, conf["input_file"])
     feature_dir = os.path.join(projectPath, conf["feature_dir"])
