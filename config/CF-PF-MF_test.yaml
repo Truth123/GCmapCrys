@@ -1,10 +1,11 @@
 input_file: "011307_NYSGRC.fasta"
 output: "out.csv"
 feature_dir: "feature"
+dataset: "CF"
 
 GCmapCrys:
   embedding_aa_dim: 32
-  embedding_ss_dim: 16
+  embedding_ss_dim: 32
   fc_dim: 32
   fc_dropout: 0
   mp:
@@ -16,7 +17,7 @@ GCmapCrys:
   
 
 checkpoint:
-  load_pth: "checkpoint/model.pth"
+  load_pth: "checkpoint/CF/model.pth"
 
 session:
   device: "cuda:0"

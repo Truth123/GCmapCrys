@@ -9,6 +9,12 @@ import csv
 from generate_features import generate_feats
 
 projectPath = os.path.dirname(__file__)
+cutoff_dict = {
+    "CF": 0.673,
+    "CRYS": 0.502,
+    "MF": 0.419,
+    "PF": 0.772
+}
 
 def run():
     parser = argparse.ArgumentParser(description='test the crystallzation network')
@@ -16,7 +22,7 @@ def run():
     args = parser.parse_args()
     conf = util.load_yaml(args.conf)
 
-    cutoff = 0.502
+    cutoff = cutoff_dict[conf["dataset"]]
     
     input_fil = os.path.join(projectPath, conf["input_file"])
     feature_dir = os.path.join(projectPath, conf["feature_dir"])
